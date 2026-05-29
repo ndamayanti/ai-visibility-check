@@ -12,7 +12,7 @@ export interface ScanInput {
 export interface AIPresenceResult {
   score: number;
   platformResults: {
-    platform: "ChatGPT" | "Perplexity";
+    platform: "Web Search" | "ChatGPT" | "Perplexity";
     prompt: string;
     mentioned: boolean;
     mentionContext: string;

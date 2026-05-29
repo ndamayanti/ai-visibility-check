@@ -38,7 +38,7 @@ export default function ResultsPage() {
               findings: data.findings,
               quickWins: data.quickWins,
               competitorsFound: data.competitorsFound,
-              createdAt: new Date().toISOString(),
+              createdAt: new Date(),
             });
             setLoading(false);
             return;
