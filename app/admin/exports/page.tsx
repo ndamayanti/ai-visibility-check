@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 
 interface ExportStatus {
   loading: boolean;
@@ -55,7 +55,10 @@ export default function ExportsPage() {
     setExportStatus({ loading: true, message: "Exporting leads...", type: "info" });
 
     try {
-      const { data, error } = await supabase.from("leads").select("*");
+      const client = getSupabase();
+      if (!client) throw new Error("Supabase is not configured.");
+
+      const { data, error } = await client.from("leads").select("*");
 
       if (error) throw error;
 
@@ -90,7 +93,10 @@ export default function ExportsPage() {
     setExportStatus({ loading: true, message: "Exporting scans...", type: "info" });
 
     try {
-      const { data, error } = await supabase
+      const client = getSupabase();
+      if (!client) throw new Error("Supabase is not configured.");
+
+      const { data, error } = await client
         .from("scan_results")
         .select(
           "id, lead_id, overall_score, ai_presence_score, site_readiness_score, content_authority_score, created_at"
@@ -129,11 +135,14 @@ export default function ExportsPage() {
     setExportStatus({ loading: true, message: "Exporting combined data...", type: "info" });
 
     try {
-      const { data: leadsData, error: leadsError } = await supabase
+      const client = getSupabase();
+      if (!client) throw new Error("Supabase is not configured.");
+
+      const { data: leadsData, error: leadsError } = await client
         .from("leads")
         .select("*");
 
-      const { data: scansData, error: scansError } = await supabase
+      const { data: scansData, error: scansError } = await client
         .from("scan_results")
         .select("*");
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import { INDUSTRIES } from "@/lib/types";
 
 interface Analytics {
@@ -25,12 +25,17 @@ export default function AnalyticsPage() {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
+        const client = getSupabase();
+        if (!client) {
+          throw new Error("Supabase is not configured.");
+        }
+
         // Fetch all leads and scans
-        const { data: leadsData } = await supabase
+        const { data: leadsData } = await client
           .from("leads")
           .select("*");
 
-        const { data: scansData } = await supabase
+        const { data: scansData } = await client
           .from("scan_results")
           .select("*");
 

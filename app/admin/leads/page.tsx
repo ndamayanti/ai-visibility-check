@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import { INDUSTRIES } from "@/lib/types";
 
 interface LeadWithScore {
@@ -26,7 +26,12 @@ export default function LeadsPage() {
   useEffect(() => {
     const fetchLeads = async () => {
       try {
-        let query = supabase.from("leads").select("*");
+        const client = getSupabase();
+        if (!client) {
+          throw new Error("Supabase is not configured.");
+        }
+
+        let query = client.from("leads").select("*");
 
         if (industryFilter) {
           query = query.eq("industry", industryFilter);
@@ -39,7 +44,7 @@ export default function LeadsPage() {
         // Fetch scores for each lead
         const leadsWithScores = await Promise.all(
           (leadsData || []).map(async (lead) => {
-            const { data: scanData } = await supabase
+            const { data: scanData } = await client
               .from("scan_results")
               .select("overall_score")
               .eq("lead_id", lead.id)

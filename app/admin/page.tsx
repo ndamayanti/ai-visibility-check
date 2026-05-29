@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 
 interface DashboardStats {
   totalScans: number;
@@ -26,15 +26,20 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        const client = getSupabase();
+        if (!client) {
+          throw new Error("Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.");
+        }
+
         // Fetch total leads
-        const { data: leadsData, error: leadsError } = await supabase
+        const { data: leadsData, error: leadsError } = await client
           .from("leads")
           .select("id", { count: "exact" });
 
         if (leadsError) throw leadsError;
 
         // Fetch total scans
-        const { data: scansData, error: scansError } = await supabase
+        const { data: scansData, error: scansError } = await client
           .from("scan_results")
           .select("id, overall_score, created_at", { count: "exact" });
 
@@ -58,7 +63,7 @@ export default function AdminDashboard() {
             : 0;
 
         // Fetch top industry
-        const { data: industryData } = await supabase
+        const { data: industryData } = await client
           .from("leads")
           .select("industry")
           .limit(100);
