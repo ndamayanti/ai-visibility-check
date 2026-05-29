@@ -91,9 +91,11 @@ export default function ResultsPage() {
       {/* Navigation */}
       <nav className="border-b border-[#1a3a40] sticky top-0 z-50 bg-[#071E22]/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-3 text-2xl font-bold">
-            <span className="text-[#FF3506] text-3xl font-bold">t</span>
-            <span className="text-white">offeedev</span>
+          <a href="/" className="flex items-center gap-3 text-2xl font-bold hover:opacity-80 transition-opacity">
+            <div className="w-8 h-8 rounded bg-[#FF3506] flex items-center justify-center text-white text-xs font-bold">
+              TD
+            </div>
+            <span className="text-white">ToffeeDev</span>
           </a>
         </div>
       </nav>
