@@ -26,6 +26,8 @@ export default function ResultsPage() {
             const data = JSON.parse(cached);
             // Transform API response to match ScanResult format
             setResult({
+              id: data.scanId,
+              leadId: data.leadId,
               overallScore: data.overallScore,
               aiPresenceScore: data.aiPresenceScore,
               siteReadinessScore: data.siteReadinessScore,
@@ -36,6 +38,7 @@ export default function ResultsPage() {
               findings: data.findings,
               quickWins: data.quickWins,
               competitorsFound: data.competitorsFound,
+              createdAt: new Date().toISOString(),
             });
             setLoading(false);
             return;
