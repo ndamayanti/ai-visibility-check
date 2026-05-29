@@ -86,7 +86,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           htmlFor="websiteUrl"
           className="block text-sm font-medium text-gray-200 mb-2"
         >
-          Website URL <span className="text-orange-500">*</span>
+          Website URL <span className="text-[#FF3506]">*</span>
         </label>
         <input
           id="websiteUrl"
@@ -96,7 +96,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           onChange={handleChange}
           placeholder="https://yourcompany.com"
           disabled={isLoading}
-          className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50"
+          className="w-full px-4 py-2 bg-[#0d2530] border border-[#1a3a40] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF3506] disabled:opacity-50"
         />
         {errors.websiteUrl && (
           <p className="mt-1 text-sm text-red-500">{errors.websiteUrl}</p>
@@ -109,7 +109,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           htmlFor="primaryKeyword"
           className="block text-sm font-medium text-gray-200 mb-2"
         >
-          Primary Keyword <span className="text-orange-500">*</span>
+          Primary Keyword <span className="text-[#FF3506]">*</span>
         </label>
         <input
           id="primaryKeyword"
@@ -119,7 +119,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           onChange={handleChange}
           placeholder="e.g., best CRM software Jakarta"
           disabled={isLoading}
-          className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50"
+          className="w-full px-4 py-2 bg-[#0d2530] border border-[#1a3a40] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF3506] disabled:opacity-50"
         />
         <p className="mt-1 text-sm text-slate-400">
           What should AI recommend you for?
@@ -135,7 +135,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           htmlFor="industry"
           className="block text-sm font-medium text-gray-200 mb-2"
         >
-          Industry <span className="text-orange-500">*</span>
+          Industry <span className="text-[#FF3506]">*</span>
         </label>
         <select
           id="industry"
@@ -143,7 +143,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           value={formData.industry}
           onChange={handleChange}
           disabled={isLoading}
-          className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50"
+          className="w-full px-4 py-2 bg-[#0d2530] border border-[#1a3a40] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FF3506] disabled:opacity-50"
         >
           <option value="">Select an industry</option>
           {INDUSTRIES.map((ind) => (
@@ -163,7 +163,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           htmlFor="businessName"
           className="block text-sm font-medium text-gray-200 mb-2"
         >
-          Business Name <span className="text-orange-500">*</span>
+          Business Name <span className="text-[#FF3506]">*</span>
         </label>
         <input
           id="businessName"
@@ -173,7 +173,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           onChange={handleChange}
           placeholder="Your company or brand name"
           disabled={isLoading}
-          className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50"
+          className="w-full px-4 py-2 bg-[#0d2530] border border-[#1a3a40] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF3506] disabled:opacity-50"
         />
         {errors.businessName && (
           <p className="mt-1 text-sm text-red-500">{errors.businessName}</p>
@@ -186,7 +186,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           htmlFor="email"
           className="block text-sm font-medium text-gray-200 mb-2"
         >
-          Email <span className="text-orange-500">*</span>
+          Email <span className="text-[#FF3506]">*</span>
         </label>
         <input
           id="email"
@@ -196,7 +196,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           onChange={handleChange}
           placeholder="you@company.com"
           disabled={isLoading}
-          className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50"
+          className="w-full px-4 py-2 bg-[#0d2530] border border-[#1a3a40] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF3506] disabled:opacity-50"
         />
         <p className="mt-1 text-sm text-slate-400">
           We'll send your full report here
@@ -212,7 +212,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           htmlFor="name"
           className="block text-sm font-medium text-gray-200 mb-2"
         >
-          Your Name <span className="text-orange-500">*</span>
+          Your Name <span className="text-[#FF3506]">*</span>
         </label>
         <input
           id="name"
@@ -222,7 +222,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           onChange={handleChange}
           placeholder="John Doe"
           disabled={isLoading}
-          className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50"
+          className="w-full px-4 py-2 bg-[#0d2530] border border-[#1a3a40] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF3506] disabled:opacity-50"
         />
         {errors.name && (
           <p className="mt-1 text-sm text-red-500">{errors.name}</p>
@@ -233,7 +233,7 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-slate-600 disabled:to-slate-700 text-white font-bold py-3 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-gradient-to-r from-[#FF3506] to-[#E63000] hover:from-[#E63000] hover:to-[#CC2A00] disabled:from-[#1a3a40] disabled:to-[#0d2530] text-white font-bold py-3 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? "Scanning..." : "Check My AI Visibility"}
       </button>

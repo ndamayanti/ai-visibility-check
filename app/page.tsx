@@ -47,13 +47,13 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-[#071E22] via-[#0d2530] to-[#071E22]">
       {/* Navigation */}
-      <nav className="border-b border-slate-700 sticky top-0 z-50 bg-slate-900/80 backdrop-blur-sm">
+      <nav className="border-b border-[#1a3a40] sticky top-0 z-50 bg-[#071E22]/90 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-2xl font-bold">
-            <span className="text-orange-500">🔍</span>
-            <span className="text-white">ToffeeDev</span>
+          <div className="flex items-center gap-3 text-2xl font-bold">
+            <span className="text-[#FF3506] text-3xl font-bold">t</span>
+            <span className="text-white">offeedev</span>
           </div>
           <div className="text-sm text-slate-400">
             Google Premier Partner 2026
@@ -82,7 +82,7 @@ export default function Home() {
                 "See which competitors AI recommends instead",
               ].map((benefit, index) => (
                 <div key={index} className="flex items-center gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white text-sm font-bold">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#FF3506] flex items-center justify-center text-white text-sm font-bold">
                     ✓
                   </div>
                   <span className="text-slate-200">{benefit}</span>
@@ -97,7 +97,7 @@ export default function Home() {
           </div>
 
           {/* Right Column - Form */}
-          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-8 shadow-2xl">
+          <div className="bg-[#0d2530] border border-[#1a3a40] rounded-2xl p-8 shadow-2xl">
             <h2 className="text-2xl font-bold text-white mb-6">
               Quick Visibility Check
             </h2>
@@ -106,7 +106,7 @@ export default function Home() {
         </div>
 
         {/* Trust Badges */}
-        <div className="mt-16 pt-16 border-t border-slate-700">
+        <div className="mt-16 pt-16 border-t border-[#1a3a40]">
           <p className="text-center text-sm text-slate-400 mb-8">
             Trusted by 700+ companies across Indonesia
           </p>
@@ -126,7 +126,7 @@ export default function Home() {
       </div>
 
       {/* Features Preview */}
-      <div className="bg-slate-800/50 border-t border-slate-700 py-16">
+      <div className="bg-[#0d2530]/50 border-t border-[#1a3a40] py-16">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-white mb-12 text-center">
             What You'll Learn
@@ -152,7 +152,7 @@ export default function Home() {
                   "How trustworthy and authoritative AI considers your content based on industry signals.",
               },
             ].map((feature, index) => (
-              <div key={index} className="bg-slate-700/50 border border-slate-600 rounded-xl p-6">
+              <div key={index} className="bg-[#0f3a45]/50 border border-[#1a5a65] rounded-xl p-6">
                 <div className="text-4xl mb-3">{feature.icon}</div>
                 <h3 className="text-lg font-semibold text-white mb-2">
                   {feature.title}
@@ -165,7 +165,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-slate-700 py-8 bg-slate-900">
+      <footer className="border-t border-[#1a3a40] py-8 bg-[#071E22]">
         <div className="max-w-6xl mx-auto px-6 text-center text-slate-400 text-sm">
           <p>Made by ToffeeDev • Indonesia's Leading AI-First SEO Agency</p>
           <p className="mt-2">

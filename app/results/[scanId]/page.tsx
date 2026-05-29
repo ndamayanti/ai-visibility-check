@@ -62,7 +62,7 @@ export default function ResultsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#071E22] via-[#0d2530] to-[#071E22] flex items-center justify-center">
         <div className="text-center">
           <div className="text-4xl mb-4 animate-spin">⏳</div>
           <p className="text-white text-lg">Loading your results...</p>
@@ -73,10 +73,10 @@ export default function ResultsPage() {
 
   if (error || !result) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#071E22] via-[#0d2530] to-[#071E22] flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 text-lg">Error: {error || "No results found"}</p>
-          <a href="/" className="text-orange-500 mt-4 inline-block hover:underline">
+          <a href="/" className="text-[#FF3506] mt-4 inline-block hover:underline">
             Return to home
           </a>
         </div>
@@ -87,13 +87,13 @@ export default function ResultsPage() {
   const overallBadge = getScoreBadge(result.overallScore);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-[#071E22] via-[#0d2530] to-[#071E22]">
       {/* Navigation */}
-      <nav className="border-b border-slate-700 sticky top-0 z-50 bg-slate-900/80 backdrop-blur-sm">
+      <nav className="border-b border-[#1a3a40] sticky top-0 z-50 bg-[#071E22]/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2 text-2xl font-bold">
-            <span className="text-orange-500">🔍</span>
-            <span className="text-white">ToffeeDev</span>
+          <a href="/" className="flex items-center gap-3 text-2xl font-bold">
+            <span className="text-[#FF3506] text-3xl font-bold">t</span>
+            <span className="text-white">offeedev</span>
           </a>
         </div>
       </nav>
@@ -167,7 +167,7 @@ export default function ResultsPage() {
             {result.findings.map((finding: Finding, index: number) => (
               <div
                 key={index}
-                className="bg-slate-800 border border-slate-700 rounded-lg p-4 flex gap-4"
+                className="bg-[#0d2530] border border-[#1a3a40] rounded-lg p-4 flex gap-4"
               >
                 <div className="flex-shrink-0 text-2xl">
                   {finding.type === "success"
@@ -195,7 +195,7 @@ export default function ResultsPage() {
             {result.quickWins.map((win, index: number) => (
               <div
                 key={index}
-                className="bg-slate-800 border border-slate-700 rounded-lg p-6"
+                className="bg-[#0d2530] border border-[#1a3a40] rounded-lg p-6"
               >
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-lg font-semibold text-white">{win.title}</h3>
@@ -234,7 +234,7 @@ export default function ResultsPage() {
             </p>
             <div className="grid md:grid-cols-2 gap-2">
               {result.competitorsFound.slice(0, 5).map((competitor, index) => (
-                <div key={index} className="bg-slate-800 rounded p-3 text-slate-200">
+                <div key={index} className="bg-[#0d2530] rounded p-3 text-slate-200">
                   {index + 1}. {competitor}
                 </div>
               ))}
@@ -247,7 +247,7 @@ export default function ResultsPage() {
         )}
 
         {/* Section 6: CTA Section */}
-        <div className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-2xl p-8 text-center mb-16">
+        <div className="bg-gradient-to-r from-[#FF3506] to-[#E63000] rounded-2xl p-8 text-center mb-16">
           <h2 className="text-3xl font-bold text-white mb-4">
             Want to Fix Your AI Visibility?
           </h2>
@@ -294,7 +294,7 @@ export default function ResultsPage() {
             ].map((platform) => (
               <button
                 key={platform.name}
-                className="bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center gap-2"
+                className="bg-[#0d2530] hover:bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center gap-2"
               >
                 <span>{platform.emoji}</span>
                 Share on {platform.name}
@@ -305,7 +305,7 @@ export default function ResultsPage() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-slate-700 py-8 bg-slate-900 mt-16">
+      <footer className="border-t border-[#1a3a40] py-8 bg-[#071E22] mt-16">
         <div className="max-w-6xl mx-auto px-6 text-center text-slate-400 text-sm">
           <p>Made by ToffeeDev • Indonesia's Leading AI-First SEO Agency</p>
         </div>
