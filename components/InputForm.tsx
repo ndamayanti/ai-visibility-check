@@ -34,7 +34,6 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -79,73 +78,121 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
       {/* Website URL */}
-      <div>
-        <label
-          htmlFor="websiteUrl"
-          className="block text-sm font-medium text-gray-200 mb-2"
-        >
-          Website URL <span className="text-[#FF3506]">*</span>
+      <div style={{ width: '100%', maxWidth: '540px' }}>
+        <label style={{
+          display: 'block',
+          fontSize: '13px',
+          fontWeight: 600,
+          color: 'rgba(255,255,255,0.8)',
+          marginBottom: '8px'
+        }}>
+          Nama brand atau domain <span style={{ color: 'var(--orange)' }}>*</span>
         </label>
         <input
-          id="websiteUrl"
           type="url"
           name="websiteUrl"
           value={formData.websiteUrl}
           onChange={handleChange}
           placeholder="https://yourcompany.com"
           disabled={isLoading}
-          className="w-full px-4 py-2 bg-[#0d2530] border border-[#1a3a40] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF3506] disabled:opacity-50"
+          style={{
+            width: '100%',
+            background: 'var(--bg2)',
+            border: '1.5px solid var(--bdr2)',
+            borderRadius: '12px',
+            padding: '14px 18px',
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontSize: '15px',
+            color: '#fff',
+            outline: 'none',
+            transition: 'border-color 0.2s',
+            opacity: isLoading ? 0.5 : 1
+          }}
+          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--orange)'}
+          onBlur={(e) => e.currentTarget.style.borderColor = 'var(--bdr2)'}
         />
         {errors.websiteUrl && (
-          <p className="mt-1 text-sm text-red-500">{errors.websiteUrl}</p>
+          <p style={{ marginTop: '6px', fontSize: '12px', color: 'var(--red)' }}>{errors.websiteUrl}</p>
         )}
       </div>
 
       {/* Primary Keyword */}
-      <div>
-        <label
-          htmlFor="primaryKeyword"
-          className="block text-sm font-medium text-gray-200 mb-2"
-        >
-          Primary Keyword <span className="text-[#FF3506]">*</span>
+      <div style={{ width: '100%', maxWidth: '540px' }}>
+        <label style={{
+          display: 'block',
+          fontSize: '13px',
+          fontWeight: 600,
+          color: 'rgba(255,255,255,0.8)',
+          marginBottom: '8px'
+        }}>
+          Keyword utama <span style={{ color: 'var(--orange)' }}>*</span>
         </label>
         <input
-          id="primaryKeyword"
           type="text"
           name="primaryKeyword"
           value={formData.primaryKeyword}
           onChange={handleChange}
-          placeholder="e.g., best CRM software Jakarta"
+          placeholder="e.g., agency SEO Jakarta"
           disabled={isLoading}
-          className="w-full px-4 py-2 bg-[#0d2530] border border-[#1a3a40] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF3506] disabled:opacity-50"
+          style={{
+            width: '100%',
+            background: 'var(--bg2)',
+            border: '1.5px solid var(--bdr2)',
+            borderRadius: '12px',
+            padding: '14px 18px',
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontSize: '15px',
+            color: '#fff',
+            outline: 'none',
+            transition: 'border-color 0.2s',
+            opacity: isLoading ? 0.5 : 1
+          }}
+          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--orange)'}
+          onBlur={(e) => e.currentTarget.style.borderColor = 'var(--bdr2)'}
         />
-        <p className="mt-1 text-sm text-slate-400">
-          What should AI recommend you for?
+        <p style={{ marginTop: '6px', fontSize: '12px', color: 'var(--muted)' }}>
+          Apa yang seharusnya AI rekomendasikan untuk kamu?
         </p>
         {errors.primaryKeyword && (
-          <p className="mt-1 text-sm text-red-500">{errors.primaryKeyword}</p>
+          <p style={{ marginTop: '6px', fontSize: '12px', color: 'var(--red)' }}>{errors.primaryKeyword}</p>
         )}
       </div>
 
       {/* Industry */}
-      <div>
-        <label
-          htmlFor="industry"
-          className="block text-sm font-medium text-gray-200 mb-2"
-        >
-          Industry <span className="text-[#FF3506]">*</span>
+      <div style={{ width: '100%', maxWidth: '540px' }}>
+        <label style={{
+          display: 'block',
+          fontSize: '13px',
+          fontWeight: 600,
+          color: 'rgba(255,255,255,0.8)',
+          marginBottom: '8px'
+        }}>
+          Industri <span style={{ color: 'var(--orange)' }}>*</span>
         </label>
         <select
-          id="industry"
           name="industry"
           value={formData.industry}
           onChange={handleChange}
           disabled={isLoading}
-          className="w-full px-4 py-2 bg-[#0d2530] border border-[#1a3a40] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FF3506] disabled:opacity-50"
+          style={{
+            width: '100%',
+            background: 'var(--bg2)',
+            border: '1.5px solid var(--bdr2)',
+            borderRadius: '12px',
+            padding: '14px 18px',
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontSize: '15px',
+            color: '#fff',
+            outline: 'none',
+            transition: 'border-color 0.2s',
+            opacity: isLoading ? 0.5 : 1
+          }}
+          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--orange)'}
+          onBlur={(e) => e.currentTarget.style.borderColor = 'var(--bdr2)'}
         >
-          <option value="">Select an industry</option>
+          <option value="">Pilih industri</option>
           {INDUSTRIES.map((ind) => (
             <option key={ind} value={ind}>
               {ind}
@@ -153,79 +200,127 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
           ))}
         </select>
         {errors.industry && (
-          <p className="mt-1 text-sm text-red-500">{errors.industry}</p>
+          <p style={{ marginTop: '6px', fontSize: '12px', color: 'var(--red)' }}>{errors.industry}</p>
         )}
       </div>
 
       {/* Business Name */}
-      <div>
-        <label
-          htmlFor="businessName"
-          className="block text-sm font-medium text-gray-200 mb-2"
-        >
-          Business Name <span className="text-[#FF3506]">*</span>
+      <div style={{ width: '100%', maxWidth: '540px' }}>
+        <label style={{
+          display: 'block',
+          fontSize: '13px',
+          fontWeight: 600,
+          color: 'rgba(255,255,255,0.8)',
+          marginBottom: '8px'
+        }}>
+          Nama bisnis <span style={{ color: 'var(--orange)' }}>*</span>
         </label>
         <input
-          id="businessName"
           type="text"
           name="businessName"
           value={formData.businessName}
           onChange={handleChange}
-          placeholder="Your company or brand name"
+          placeholder="Nama brand atau perusahaan kamu"
           disabled={isLoading}
-          className="w-full px-4 py-2 bg-[#0d2530] border border-[#1a3a40] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF3506] disabled:opacity-50"
+          style={{
+            width: '100%',
+            background: 'var(--bg2)',
+            border: '1.5px solid var(--bdr2)',
+            borderRadius: '12px',
+            padding: '14px 18px',
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontSize: '15px',
+            color: '#fff',
+            outline: 'none',
+            transition: 'border-color 0.2s',
+            opacity: isLoading ? 0.5 : 1
+          }}
+          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--orange)'}
+          onBlur={(e) => e.currentTarget.style.borderColor = 'var(--bdr2)'}
         />
         {errors.businessName && (
-          <p className="mt-1 text-sm text-red-500">{errors.businessName}</p>
+          <p style={{ marginTop: '6px', fontSize: '12px', color: 'var(--red)' }}>{errors.businessName}</p>
         )}
       </div>
 
       {/* Email */}
-      <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-200 mb-2"
-        >
-          Email <span className="text-[#FF3506]">*</span>
+      <div style={{ width: '100%', maxWidth: '540px' }}>
+        <label style={{
+          display: 'block',
+          fontSize: '13px',
+          fontWeight: 600,
+          color: 'rgba(255,255,255,0.8)',
+          marginBottom: '8px'
+        }}>
+          Email <span style={{ color: 'var(--orange)' }}>*</span>
         </label>
         <input
-          id="email"
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
           placeholder="you@company.com"
           disabled={isLoading}
-          className="w-full px-4 py-2 bg-[#0d2530] border border-[#1a3a40] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF3506] disabled:opacity-50"
+          style={{
+            width: '100%',
+            background: 'var(--bg2)',
+            border: '1.5px solid var(--bdr2)',
+            borderRadius: '12px',
+            padding: '14px 18px',
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontSize: '15px',
+            color: '#fff',
+            outline: 'none',
+            transition: 'border-color 0.2s',
+            opacity: isLoading ? 0.5 : 1
+          }}
+          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--orange)'}
+          onBlur={(e) => e.currentTarget.style.borderColor = 'var(--bdr2)'}
         />
-        <p className="mt-1 text-sm text-slate-400">
-          We'll send your full report here
+        <p style={{ marginTop: '6px', fontSize: '12px', color: 'var(--muted)' }}>
+          Kami akan mengirim laporan lengkap ke email ini
         </p>
         {errors.email && (
-          <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+          <p style={{ marginTop: '6px', fontSize: '12px', color: 'var(--red)' }}>{errors.email}</p>
         )}
       </div>
 
       {/* Name */}
-      <div>
-        <label
-          htmlFor="name"
-          className="block text-sm font-medium text-gray-200 mb-2"
-        >
-          Your Name <span className="text-[#FF3506]">*</span>
+      <div style={{ width: '100%', maxWidth: '540px' }}>
+        <label style={{
+          display: 'block',
+          fontSize: '13px',
+          fontWeight: 600,
+          color: 'rgba(255,255,255,0.8)',
+          marginBottom: '8px'
+        }}>
+          Nama lengkap <span style={{ color: 'var(--orange)' }}>*</span>
         </label>
         <input
-          id="name"
           type="text"
           name="name"
           value={formData.name}
           onChange={handleChange}
           placeholder="John Doe"
           disabled={isLoading}
-          className="w-full px-4 py-2 bg-[#0d2530] border border-[#1a3a40] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF3506] disabled:opacity-50"
+          style={{
+            width: '100%',
+            background: 'var(--bg2)',
+            border: '1.5px solid var(--bdr2)',
+            borderRadius: '12px',
+            padding: '14px 18px',
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontSize: '15px',
+            color: '#fff',
+            outline: 'none',
+            transition: 'border-color 0.2s',
+            opacity: isLoading ? 0.5 : 1
+          }}
+          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--orange)'}
+          onBlur={(e) => e.currentTarget.style.borderColor = 'var(--bdr2)'}
         />
         {errors.name && (
-          <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+          <p style={{ marginTop: '6px', fontSize: '12px', color: 'var(--red)' }}>{errors.name}</p>
         )}
       </div>
 
@@ -233,17 +328,46 @@ export default function InputForm({ onSubmit, isLoading }: InputFormProps) {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-gradient-to-r from-[#FF3506] to-[#E63000] hover:from-[#E63000] hover:to-[#CC2A00] disabled:from-[#1a3a40] disabled:to-[#0d2530] text-white font-bold py-3 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        style={{
+          width: '100%',
+          maxWidth: '540px',
+          background: isLoading ? 'var(--muted2)' : 'var(--orange)',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '12px',
+          padding: '14px 26px',
+          fontFamily: "'Plus Jakarta Sans', sans-serif",
+          fontSize: '15px',
+          fontWeight: 700,
+          cursor: isLoading ? 'not-allowed' : 'pointer',
+          transition: 'background 0.2s, transform 0.15s',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          opacity: isLoading ? 0.7 : 1
+        }}
+        onMouseEnter={(e) => {
+          if (!isLoading) e.currentTarget.style.background = 'var(--orange-h)';
+        }}
+        onMouseLeave={(e) => {
+          if (!isLoading) e.currentTarget.style.background = 'var(--orange)';
+        }}
       >
-        {isLoading ? "Scanning..." : "Check My AI Visibility"}
+        {isLoading ? "Memindai..." : "Cek Sekarang"}
+        {!isLoading && (
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" style={{ marginLeft: '4px' }}>
+            <path d="M2.5 7.5h10m-4.5-4.5 4.5 4.5-4.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
       </button>
 
       {errors.submit && (
-        <p className="text-sm text-red-500 text-center">{errors.submit}</p>
+        <p style={{ fontSize: '12px', color: 'var(--red)', textAlign: 'center', maxWidth: '540px' }}>{errors.submit}</p>
       )}
 
-      <p className="text-center text-sm text-slate-400">
-        ⏱️ This takes about 30-60 seconds
+      <p style={{ fontSize: '12px', color: 'var(--muted2)', textAlign: 'center', maxWidth: '540px' }}>
+        ✓ Gratis · ✓ Tanpa daftar · ✓ Hasil instan di halaman ini
       </p>
     </form>
   );

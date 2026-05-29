@@ -19,12 +19,10 @@ export default function ResultsPage() {
 
     const fetchResults = async () => {
       try {
-        // First, try to get from localStorage (for scans without Supabase)
         if (typeof window !== 'undefined') {
           const cached = localStorage.getItem(`scan_${scanId}`);
           if (cached) {
             const data = JSON.parse(cached);
-            // Transform API response to match ScanResult format
             setResult({
               id: data.scanId,
               leadId: data.leadId,
@@ -45,7 +43,6 @@ export default function ResultsPage() {
           }
         }
 
-        // Fall back to API (for Supabase-enabled scans)
         const response = await fetch(`/api/results/${scanId}`);
         if (!response.ok) throw new Error("Failed to fetch results");
         const data = await response.json();
@@ -62,10 +59,16 @@ export default function ResultsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#071E22] via-[#0d2530] to-[#071E22] flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-4xl mb-4 animate-spin">⏳</div>
-          <p className="text-white text-lg">Loading your results...</p>
+      <div style={{
+        minHeight: '100vh',
+        background: 'var(--bg)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem', animation: 'spin 1s linear infinite' }}>⏳</div>
+          <p style={{ color: '#fff', fontSize: '18px' }}>Memproses hasil audit...</p>
         </div>
       </div>
     );
@@ -73,244 +76,437 @@ export default function ResultsPage() {
 
   if (error || !result) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#071E22] via-[#0d2530] to-[#071E22] flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 text-lg">Error: {error || "No results found"}</p>
-          <a href="/" className="text-[#FF3506] mt-4 inline-block hover:underline">
-            Return to home
+      <div style={{
+        minHeight: '100vh',
+        background: 'var(--bg)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ color: 'var(--red)', fontSize: '18px' }}>Error: {error || "No results found"}</p>
+          <a href="/" style={{ color: 'var(--orange)', marginTop: '1rem', display: 'inline-block', textDecoration: 'underline' }}>
+            Kembali ke beranda
           </a>
         </div>
       </div>
     );
   }
 
-  const overallBadge = getScoreBadge(result.overallScore);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#071E22] via-[#0d2530] to-[#071E22]">
+    <div style={{ background: 'var(--bg)' }}>
       {/* Navigation */}
-      <nav className="border-b border-[#1a3a40] sticky top-0 z-50 bg-[#071E22]/80 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-3 text-2xl font-bold hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 rounded bg-[#FF3506] flex items-center justify-center text-white text-xs font-bold">
-              TD
-            </div>
-            <span className="text-white">ToffeeDev</span>
-          </a>
-        </div>
+      <nav style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 2.5rem',
+        height: '62px',
+        background: 'rgba(19, 18, 16, 0.9)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid var(--bdr)'
+      }}>
+        <a href="/" style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          textDecoration: 'none',
+          fontSize: '15px',
+          fontWeight: 700
+        }}>
+          <div style={{
+            width: '34px',
+            height: '34px',
+            borderRadius: '8px',
+            background: 'var(--orange)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '12px',
+            fontWeight: 800,
+            color: '#fff'
+          }}>
+            TD
+          </div>
+          <span style={{ color: '#fff' }}>ToffeeDev</span>
+        </a>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Section 1: Hero Score */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-white mb-8">
-            Your AI Visibility Score
-          </h1>
-          <ScoreGauge score={result.overallScore} />
-          <div className="mt-8 inline-block px-4 py-2 rounded-full border" style={{ borderColor: overallBadge.color }}>
-            <span
-              className={`font-semibold ${overallBadge.color}`}
-            >
-              {overallBadge.label}
-            </span>
+      {/* Score Banner */}
+      <div style={{
+        background: 'var(--bg2)',
+        borderTop: '1px solid var(--bdr)',
+        borderBottom: '1px solid var(--bdr)',
+        padding: '3.5rem 2rem',
+        marginTop: '62px'
+      }}>
+        <div style={{
+          maxWidth: '900px',
+          margin: '0 auto',
+          display: 'grid',
+          gridTemplateColumns: '1fr auto',
+          gap: '3rem',
+          alignItems: 'center'
+        }}>
+          <div>
+            <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '.1em', color: 'var(--muted)', marginBottom: '.5rem' }}>
+              Laporan AI Visibility Audit
+            </div>
+            <div style={{ fontSize: '36px', fontWeight: 800, letterSpacing: '-.02em', marginBottom: '.25rem' }}>
+              —
+            </div>
+            <div style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '1.5rem' }}>
+              {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+              <div style={{
+                fontSize: '13px',
+                fontWeight: 700,
+                padding: '6px 16px',
+                borderRadius: '99px',
+                background: 'var(--orange-dim)',
+                color: '#f0904a',
+                border: '1px solid var(--orange-bdr)'
+              }}>
+                Cukup Baik
+              </div>
+              <div style={{ fontSize: '14px', color: 'var(--muted)', maxWidth: '380px', lineHeight: 1.6 }}>
+                Brand ini sudah punya dasar yang baik di AI. Fokus pada niche tertentu bisa mendorong score lebih tinggi.
+              </div>
+            </div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <ScoreGauge score={result.overallScore} />
+            <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', textAlign: 'center' }}>
+              AI Visibility Score
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Section 2: Category Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
+      {/* Main Content */}
+      <div style={{
+        maxWidth: '900px',
+        margin: '0 auto',
+        padding: '2.5rem 2rem'
+      }}>
+        {/* Category Cards */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '1.5rem',
+          marginBottom: '2rem'
+        }}>
           <CategoryCard
             title="AI Search Presence"
             icon="🤖"
             score={result.aiPresenceScore}
-            description="How often AI platforms mention your brand"
+            description="Seberapa sering AI platform menyebut brand kamu"
             findings={[
               result.aiPresenceData.summary,
-              `Checked across ${result.aiPresenceData.platformResults.length} AI queries`,
+              `Diperiksa di ${result.aiPresenceData.platformResults.length} platform AI`,
             ]}
           />
           <CategoryCard
             title="Website AI-Readiness"
             icon="🔧"
             score={result.siteReadinessScore}
-            description="How well your site is structured for AI"
+            description="Seberapa baik struktur website untuk AI"
             findings={[
-              `${result.siteReadinessData.schemaTypes.length} schema types found`,
+              `${result.siteReadinessData.schemaTypes.length} tipe schema ditemukan`,
               result.siteReadinessData.hasLLMsTxt
-                ? "✓ llms.txt configured"
-                : "✗ Missing llms.txt file",
+                ? "✓ llms.txt dikonfigurasi"
+                : "✗ Belum ada llms.txt",
               result.siteReadinessData.hasMetaDescription
-                ? "✓ Meta descriptions present"
-                : "✗ Missing meta descriptions",
+                ? "✓ Meta descriptions ada"
+                : "✗ Belum ada meta descriptions",
             ]}
           />
           <CategoryCard
             title="Content Authority"
             icon="⭐"
             score={result.contentAuthorityScore}
-            description="How trustworthy AI considers your content"
+            description="Kredibilitas content menurut AI"
             findings={[
               result.contentAuthorityData.hasAboutPage
-                ? "✓ About page present"
-                : "✗ No About page",
+                ? "✓ About page ada"
+                : "✗ Belum ada about page",
               result.contentAuthorityData.hasTestimonials
-                ? "✓ Testimonials included"
-                : "✗ No testimonials",
+                ? "✓ Testimonial ada"
+                : "✗ Belum ada testimonial",
               result.contentAuthorityData.hasCaseStudies
-                ? "✓ Case studies available"
-                : "✗ No case studies",
+                ? "✓ Case studies ada"
+                : "✗ Belum ada case studies",
             ]}
           />
         </div>
 
-        {/* Section 3: Key Findings */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-bold text-white mb-6">Key Findings</h2>
-          <div className="space-y-3">
+        {/* Key Findings */}
+        <div style={{ marginBottom: '2rem' }}>
+          <h2 style={{
+            fontSize: '20px',
+            fontWeight: 700,
+            color: '#fff',
+            marginBottom: '1rem',
+            textTransform: 'uppercase',
+            letterSpacing: '.06em',
+            color: 'var(--muted)',
+            marginTop: '1.5rem'
+          }}>
+            Key Findings
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {result.findings.map((finding: Finding, index: number) => (
               <div
                 key={index}
-                className="bg-[#0d2530] border border-[#1a3a40] rounded-lg p-4 flex gap-4"
+                style={{
+                  background: 'var(--bg2)',
+                  border: '1px solid var(--bdr)',
+                  borderRadius: '14px',
+                  padding: '1.5rem',
+                  transition: 'border-color 0.2s'
+                }}
               >
-                <div className="flex-shrink-0 text-2xl">
-                  {finding.type === "success"
-                    ? "✅"
-                    : finding.type === "warning"
-                    ? "⚠️"
-                    : "❌"}
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-white">{finding.title}</h3>
-                  <p className="text-slate-300 text-sm">{finding.description}</p>
-                  <span className="inline-block mt-2 text-xs px-2 py-1 rounded bg-slate-700 text-slate-300">
-                    Impact: {finding.impact}
-                  </span>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
+                  <div style={{ fontSize: '20px', flexShrink: 0 }}>
+                    {finding.type === "success"
+                      ? "✅"
+                      : finding.type === "warning"
+                      ? "⚠️"
+                      : "❌"}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '3px', color: '#fff' }}>
+                      {finding.title}
+                    </h3>
+                    <p style={{ fontSize: '14px', color: 'rgba(255,255,255,.65)', lineHeight: 1.7, marginBottom: '14px' }}>
+                      {finding.description}
+                    </p>
+                    <div style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      background: 'var(--green-dim)',
+                      color: 'var(--green)',
+                      border: '1px solid var(--green-bdr)',
+                      padding: '4px 12px',
+                      borderRadius: '99px'
+                    }}>
+                      ↑ +{finding.impact} estimasi
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Section 4: Quick Wins */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-bold text-white mb-6">Top 3 Quick Wins</h2>
-          <div className="space-y-4">
+        {/* Quick Wins */}
+        <div style={{ marginBottom: '2rem' }}>
+          <h2 style={{
+            fontSize: '13px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '.06em',
+            color: 'var(--muted)',
+            marginBottom: '1rem',
+            marginTop: '1.5rem'
+          }}>
+            Top 3 Quick Wins
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {result.quickWins.map((win, index: number) => (
               <div
                 key={index}
-                className="bg-[#0d2530] border border-[#1a3a40] rounded-lg p-6"
+                style={{
+                  background: 'var(--bg2)',
+                  border: '1px solid var(--bdr)',
+                  borderRadius: '14px',
+                  padding: '1.5rem',
+                  transition: 'border-color 0.2s'
+                }}
               >
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-white">{win.title}</h3>
-                  <span className="text-sm font-semibold">
-                    {index + 1 === 1 ? "⭐" : index + 1 === 2 ? "⭐⭐" : "⭐⭐⭐"}
-                  </span>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '12px' }}>
+                  <div style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '10px',
+                    background: 'var(--orange-dim)',
+                    border: '1px solid var(--orange-bdr)',
+                    color: 'var(--orange)',
+                    fontSize: '16px',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                  }}>
+                    {index + 1}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '16px', fontWeight: 700, marginBottom: '3px', color: '#fff' }}>
+                      {win.title}
+                    </div>
+                    <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '.06em', color: 'var(--muted)' }}>
+                      Content Authority
+                    </div>
+                  </div>
                 </div>
-                <p className="text-slate-300 mb-3">{win.description}</p>
-                <div className="flex gap-4 mb-4">
-                  <span className="text-xs px-3 py-1 rounded-full bg-blue-500/20 text-blue-300">
-                    Difficulty: {win.difficulty}
-                  </span>
-                  <span className="text-xs px-3 py-1 rounded-full bg-green-500/20 text-green-300">
-                    Impact: {win.estimatedImpact}
-                  </span>
+                <div style={{ fontSize: '14px', color: 'rgba(255,255,255,.65)', lineHeight: 1.7, marginBottom: '14px', paddingLeft: '50px' }}>
+                  {win.description}
                 </div>
-                <div className="text-sm text-slate-400">
-                  <p className="font-semibold mb-2">Steps:</p>
-                  <ol className="list-decimal list-inside space-y-1">
-                    {win.actionSteps.map((step, stepIndex) => (
-                      <li key={stepIndex}>{step}</li>
-                    ))}
-                  </ol>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', flexWrap: 'wrap', paddingLeft: '50px' }}>
+                  <div style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    background: 'var(--green-dim)',
+                    color: 'var(--green)',
+                    border: '1px solid var(--green-bdr)',
+                    padding: '4px 12px',
+                    borderRadius: '99px'
+                  }}>
+                    ↑ {win.estimatedImpact}
+                  </div>
+                  <div style={{ fontSize: '12px', color: 'var(--muted)' }}>
+                    Effort: {win.difficulty}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Section 5: Competitor Snapshot */}
+        {/* Competitors */}
         {result.competitorsFound.length > 0 && (
-          <div className="mb-16 bg-red-950/20 border border-red-900/30 rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-white mb-4">⚠️ Competitor Snapshot</h2>
-            <p className="text-slate-300 mb-4">
-              When we asked AI about your keyword, these competitors appeared instead:
+          <div style={{
+            marginBottom: '2rem',
+            background: 'var(--red-dim)',
+            border: '1px solid var(--red-bdr)',
+            borderRadius: '14px',
+            padding: '1.5rem',
+            marginTop: '1.5rem'
+          }}>
+            <h2 style={{
+              fontSize: '15px',
+              fontWeight: 700,
+              marginBottom: '.25rem',
+              color: '#fff'
+            }}>
+              ⚠️ Kompetitor yang Muncul di AI
+            </h2>
+            <p style={{ fontSize: '14px', color: 'rgba(255,255,255,.65)', lineHeight: 1.6, marginBottom: '1rem' }}>
+              Ketika AI ditanya tentang keyword kamu, kompetitor ini yang muncul:
             </p>
-            <div className="grid md:grid-cols-2 gap-2">
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '8px'
+            }}>
               {result.competitorsFound.slice(0, 5).map((competitor, index) => (
-                <div key={index} className="bg-[#0d2530] rounded p-3 text-slate-200">
+                <div key={index} style={{
+                  background: 'var(--bg2)',
+                  borderRadius: '10px',
+                  padding: '10px 14px',
+                  fontSize: '13px',
+                  color: 'rgba(255,255,255,.7)'
+                }}>
                   {index + 1}. {competitor}
                 </div>
               ))}
             </div>
-            <p className="text-slate-400 text-sm mt-4">
-              Your competitors are being recommended by AI. You're not visible yet. This is
-              urgent.
-            </p>
           </div>
         )}
 
-        {/* Section 6: CTA Section */}
-        <div className="bg-gradient-to-r from-[#FF3506] to-[#E63000] rounded-2xl p-8 text-center mb-16">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Want to Fix Your AI Visibility?
-          </h2>
-          <p className="text-orange-100 text-lg mb-8">
-            Your score is {result.overallScore}/100. Companies working with ToffeeDev improve their AI
-            Visibility Score by an average of 40+ points in 90 days.
-          </p>
-          <div className="space-y-2 mb-8 text-left max-w-sm mx-auto">
-            {[
-              "✅ AI Visibility Monitoring (up to 100 prompts)",
-              "✅ Schema Markup Optimization",
-              "✅ GEO / AI Search Optimization",
-              "✅ Monthly Strategy & Reporting",
-            ].map((feature, index) => (
-              <p key={index} className="text-white">
-                {feature}
+        {/* CTA Section */}
+        <div style={{
+          background: 'var(--bg2)',
+          borderTop: '1px solid var(--bdr)',
+          padding: '3rem 2rem',
+          marginTop: '2rem'
+        }}>
+          <div style={{
+            maxWidth: '900px',
+            margin: '0 auto',
+            display: 'grid',
+            gridTemplateColumns: '1fr auto',
+            gap: '2rem',
+            alignItems: 'center'
+          }}>
+            <div>
+              <h3 style={{ fontSize: '24px', fontWeight: 800, letterSpacing: '-.01em', marginBottom: '.5rem', color: '#fff' }}>
+                Mau score naik dari <span style={{ color: 'var(--orange)' }}>{result.overallScore}</span> ke 80+?
+              </h3>
+              <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.6, maxWidth: '460px' }}>
+                Tim ToffeeDev siap bantu buat strategi GEO (Generative Engine Optimization) yang konkret. Konsultasi pertama gratis, tanpa komitmen.
               </p>
-            ))}
-          </div>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-orange-600 hover:bg-slate-100 font-bold py-3 px-8 rounded-lg transition-all">
-              Schedule a Free Strategy Call
+            </div>
+            <button style={{
+              background: 'var(--orange)',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '12px',
+              padding: '14px 28px',
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontSize: '15px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              transition: 'background 0.2s, transform 0.15s',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'var(--orange-h)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'var(--orange)'}
+            >
+              Konsultasi Gratis
             </button>
-            <button className="bg-orange-500 text-white hover:bg-orange-600 font-bold py-3 px-8 rounded-lg transition-all">
-              Download Full Report as PDF
-            </button>
-          </div>
-          <p className="text-orange-100 text-sm mt-6">
-            "If customers can't find you, they can't choose you." — Ryan Kristo, ToffeeDev
-          </p>
-        </div>
-
-        {/* Section 7: Share Section */}
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-white mb-6">Share Your Score</h2>
-          <p className="text-slate-400 mb-4">
-            Let your network know about your AI visibility
-          </p>
-          <div className="flex justify-center gap-4">
-            {[
-              { name: "LinkedIn", emoji: "💼" },
-              { name: "Twitter", emoji: "𝕏" },
-              { name: "WhatsApp", emoji: "💬" },
-            ].map((platform) => (
-              <button
-                key={platform.name}
-                className="bg-[#0d2530] hover:bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center gap-2"
-              >
-                <span>{platform.emoji}</span>
-                Share on {platform.name}
-              </button>
-            ))}
           </div>
         </div>
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-[#1a3a40] py-8 bg-[#071E22] mt-16">
-        <div className="max-w-6xl mx-auto px-6 text-center text-slate-400 text-sm">
-          <p>Made by ToffeeDev • Indonesia's Leading AI-First SEO Agency</p>
+      <footer style={{
+        background: 'var(--bg2)',
+        borderTop: '1px solid var(--bdr)',
+        padding: '1.6rem 2.5rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '1rem',
+        fontSize: '13px',
+        color: 'var(--muted)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{
+            width: '28px',
+            height: '28px',
+            borderRadius: '6px',
+            background: 'var(--orange)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '10px',
+            fontWeight: 800,
+            color: '#fff'
+          }}>
+            TD
+          </div>
+          <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>ToffeeDev</span>
         </div>
+        <div>© 2025 PT Toffee International · Jakarta, Indonesia</div>
+        <div>Google Premier Partner · SEMrush Official Partner · Penyelenggara SEOCon</div>
       </footer>
     </div>
   );

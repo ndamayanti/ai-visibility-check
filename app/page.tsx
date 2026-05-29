@@ -47,119 +47,248 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#071E22] via-[#0d2530] to-[#071E22]">
+    <div style={{ background: 'var(--bg)' }}>
       {/* Navigation */}
-      <nav className="border-b border-[#1a3a40] sticky top-0 z-50 bg-[#071E22]/90 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-3 text-2xl font-bold hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 rounded bg-[#FF3506] flex items-center justify-center text-white text-xs font-bold">
-              TD
-            </div>
-            <span className="text-white">ToffeeDev</span>
-          </a>
-          <div className="text-sm text-slate-400">
-            Google Premier Partner 2026
+      <nav style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 2.5rem',
+        height: '62px',
+        background: 'rgba(19, 18, 16, 0.9)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid var(--bdr)'
+      }}>
+        <a href="/" style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          textDecoration: 'none',
+          fontSize: '15px',
+          fontWeight: 700
+        }}>
+          <div style={{
+            width: '34px',
+            height: '34px',
+            borderRadius: '8px',
+            background: 'var(--orange)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '12px',
+            fontWeight: 800,
+            color: '#fff'
+          }}>
+            TD
           </div>
-        </div>
+          <span style={{ color: '#fff' }}>ToffeeDev</span>
+        </a>
       </nav>
 
       {/* Hero Section */}
-      <div className="max-w-6xl mx-auto px-6 py-16 md:py-24">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Text */}
-          <div>
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-              Is Your Brand Visible in AI Search?
-            </h1>
-            <p className="text-xl text-slate-300 mb-8">
-              Find out if ChatGPT, Perplexity, and Google AI recommend your business — in 60 seconds.
-            </p>
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '8rem 2rem 5rem',
+        textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Hero Glow Effect */}
+        <div style={{
+          position: 'absolute',
+          top: '-150px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '900px',
+          height: '600px',
+          borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(232,80,10,0.13) 0%, transparent 65%)',
+          zIndex: 0
+        }}></div>
 
-            {/* Benefits */}
-            <div className="space-y-4 mb-8">
-              {[
-                "Check AI search visibility across 2+ platforms",
-                "Analyze your website's AI-readiness",
-                "Get actionable recommendations",
-                "See which competitors AI recommends instead",
-              ].map((benefit, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#FF3506] flex items-center justify-center text-white text-sm font-bold">
-                    ✓
-                  </div>
-                  <span className="text-slate-200">{benefit}</span>
-                </div>
-              ))}
-            </div>
+        <div style={{
+          position: 'relative',
+          zIndex: 1,
+          maxWidth: '800px',
+          width: '100%'
+        }}>
+          <h1 style={{
+            fontSize: 'clamp(52px, 8vw, 100px)',
+            fontWeight: 800,
+            lineHeight: 0.98,
+            letterSpacing: '-0.025em',
+            marginBottom: '1.5rem',
+            color: 'var(--white)'
+          }}>
+            Does AI <br />
+            <span style={{ color: 'var(--orange)' }}>recommend</span> <br />
+            <span style={{ color: 'rgba(255,255,255,.3)' }}>your brand?</span>
+          </h1>
 
-            {/* CTA Button */}
-            <p className="text-sm text-slate-400">
-              ⏱️ Takes about 30-60 seconds • 100% free • No credit card required
-            </p>
-          </div>
+          <p style={{
+            fontSize: '18px',
+            fontWeight: 300,
+            lineHeight: 1.7,
+            color: 'var(--muted)',
+            maxWidth: '480px',
+            margin: '0 auto 2.5rem'
+          }}>
+            Find out if ChatGPT, Perplexity, and Google AI recommend your business — in 60 seconds.
+          </p>
 
-          {/* Right Column - Form */}
-          <div className="bg-[#0d2530] border border-[#1a3a40] rounded-2xl p-8 shadow-2xl">
-            <h2 className="text-2xl font-bold text-white mb-6">
-              Quick Visibility Check
-            </h2>
+          <div style={{ marginBottom: '2rem' }}>
             <InputForm onSubmit={handleSubmit} isLoading={isLoading} />
           </div>
-        </div>
 
-        {/* Trust Badges */}
-        <div className="mt-16 pt-16 border-t border-[#1a3a40]">
-          <p className="text-center text-sm text-slate-400 mb-8">
-            Trusted by 700+ companies across Indonesia
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          {/* Stats */}
+          <div style={{
+            display: 'flex',
+            gap: 0,
+            marginTop: '4rem',
+            border: '1px solid var(--bdr)',
+            borderRadius: '14px',
+            overflow: 'hidden',
+            width: '100%',
+            maxWidth: '540px',
+            margin: '4rem auto 0'
+          }}>
             {[
-              "🏆 Google Premier Partner 2026",
-              "📈 700+ Happy Clients",
-              "🚀 9+ Years in SEO",
-              "🌍 Serving Indonesia & Beyond",
-            ].map((badge, index) => (
-              <div key={index} className="text-slate-300 text-sm">
-                {badge}
+              { label: 'brand tidak disebut AI sama sekali', value: '73%' },
+              { label: 'lebih tinggi intent dari AI search', value: '4.2×' },
+              { label: 'brand sudah diaudit ToffeeDev', value: '1.000+' }
+            ].map((stat, i) => (
+              <div key={i} style={{
+                flex: 1,
+                padding: '1.1rem 1rem',
+                textAlign: 'center',
+                borderRight: i < 2 ? '1px solid var(--bdr)' : 'none'
+              }}>
+                <div style={{
+                  fontSize: '26px',
+                  fontWeight: 800,
+                  color: 'var(--orange)',
+                  lineHeight: 1
+                }}>
+                  {stat.value}
+                </div>
+                <div style={{
+                  fontSize: '11px',
+                  color: 'var(--muted)',
+                  marginTop: '3px',
+                  lineHeight: 1.4
+                }}>
+                  {stat.label}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
+      {/* Trust Badges */}
+      <div style={{
+        maxWidth: '6xl',
+        margin: '0 auto',
+        padding: '4rem 2rem'
+      }}>
+        <p style={{
+          textAlign: 'center',
+          fontSize: '13px',
+          color: 'var(--muted)',
+          marginBottom: '2rem'
+        }}>
+          Trusted by 700+ companies across Indonesia
+        </p>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '2rem',
+          textAlign: 'center'
+        }}>
+          {[
+            "🏆 Google Premier Partner 2026",
+            "📈 700+ Happy Clients",
+            "🚀 9+ Years in SEO",
+            "🌍 Serving Indonesia & Beyond",
+          ].map((badge, index) => (
+            <div key={index} style={{ fontSize: '13px', color: 'var(--muted)' }}>
+              {badge}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Features Preview */}
-      <div className="bg-[#0d2530]/50 border-t border-[#1a3a40] py-16">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-white mb-12 text-center">
+      <div style={{
+        background: 'var(--bg2)',
+        borderTop: '1px solid var(--bdr)',
+        padding: '4rem 2rem'
+      }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{
+            fontSize: 'clamp(30px, 4vw, 48px)',
+            fontWeight: 800,
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+            marginBottom: '2rem',
+            textAlign: 'center',
+            color: 'var(--white)'
+          }}>
             What You'll Learn
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '1.5rem'
+          }}>
             {[
               {
                 icon: "🤖",
                 title: "AI Platform Presence",
-                description:
-                  "How often ChatGPT, Perplexity, and other AI platforms mention your brand in relevant searches.",
+                description: "How often ChatGPT, Perplexity, and other AI platforms mention your brand in relevant searches.",
               },
               {
                 icon: "🔧",
                 title: "Website AI-Readiness",
-                description:
-                  "Technical factors that affect how well AI crawlers understand and recommend your website.",
+                description: "Technical factors that affect how well AI crawlers understand and recommend your website.",
               },
               {
                 icon: "⭐",
                 title: "Content Authority",
-                description:
-                  "How trustworthy and authoritative AI considers your content based on industry signals.",
+                description: "How trustworthy and authoritative AI considers your content based on industry signals.",
               },
             ].map((feature, index) => (
-              <div key={index} className="bg-[#0f3a45]/50 border border-[#1a5a65] rounded-xl p-6">
-                <div className="text-4xl mb-3">{feature.icon}</div>
-                <h3 className="text-lg font-semibold text-white mb-2">
+              <div key={index} style={{
+                background: 'var(--bg3)',
+                border: '1px solid var(--bdr)',
+                borderRadius: '12px',
+                padding: '1.5rem'
+              }}>
+                <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{feature.icon}</div>
+                <h3 style={{
+                  fontSize: '15px',
+                  fontWeight: 700,
+                  marginBottom: '0.5rem',
+                  color: 'var(--white)'
+                }}>
                   {feature.title}
                 </h3>
-                <p className="text-slate-300 text-sm">{feature.description}</p>
+                <p style={{
+                  fontSize: '13px',
+                  color: 'var(--muted)',
+                  lineHeight: 1.65
+                }}>
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -167,13 +296,37 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-[#1a3a40] py-8 bg-[#071E22]">
-        <div className="max-w-6xl mx-auto px-6 text-center text-slate-400 text-sm">
-          <p>Made by ToffeeDev • Indonesia's Leading AI-First SEO Agency</p>
-          <p className="mt-2">
-            This free tool is powered by ToffeeDev's proprietary AI analysis technology.
-          </p>
+      <footer style={{
+        background: 'var(--bg2)',
+        borderTop: '1px solid var(--bdr)',
+        padding: '1.6rem 2.5rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '1rem',
+        fontSize: '13px',
+        color: 'var(--muted)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{
+            width: '28px',
+            height: '28px',
+            borderRadius: '6px',
+            background: 'var(--orange)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '10px',
+            fontWeight: 800,
+            color: '#fff'
+          }}>
+            TD
+          </div>
+          <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>ToffeeDev</span>
         </div>
+        <div>© 2025 PT Toffee International · Jakarta, Indonesia</div>
+        <div>Google Premier Partner · SEMrush Official Partner · Penyelenggara SEOCon</div>
       </footer>
     </div>
   );
