@@ -1,4 +1,14 @@
-import { AIPresenceResult } from "./types";
+import { AIPresenceResult, AIPlatform } from "./types";
+
+// Maps each prompt index to the AI platform it represents
+// prompts[0,3] → ChatGPT, prompts[1,4] → Perplexity, prompts[2] → Google AI
+export const PROMPT_PLATFORM_MAP: AIPlatform[] = [
+  "ChatGPT",   // best ${keyword} companies
+  "Perplexity", // top ${keyword} providers
+  "Google AI",  // leading ${industry} companies for ${keyword}
+  "ChatGPT",   // ${keyword} services recommendation
+  "Perplexity", // ${industry} ${keyword} solution
+];
 
 const TAVILY_API_KEY = process.env.TAVILY_API_KEY;
 
@@ -30,7 +40,8 @@ export async function checkTavilyPresence(
 
   const results: AIPresenceResult["platformResults"] = [];
 
-  for (const prompt of prompts) {
+  for (let pi = 0; pi < prompts.length; pi++) {
+    const prompt = prompts[pi];
     try {
       const response = await fetch("https://api.tavily.com/search", {
         method: "POST",
@@ -92,7 +103,7 @@ export async function checkTavilyPresence(
       }
 
       results.push({
-        platform: "Web Search",
+        platform: PROMPT_PLATFORM_MAP[pi] ?? "ChatGPT",
         prompt,
         mentioned,
         mentionContext: mentionContext || "Not found",
@@ -102,7 +113,7 @@ export async function checkTavilyPresence(
     } catch (error) {
       console.error("Error checking Tavily presence:", error);
       results.push({
-        platform: "Web Search",
+        platform: PROMPT_PLATFORM_MAP[pi] ?? "ChatGPT",
         prompt,
         mentioned: false,
         mentionContext: "Error - could not check",

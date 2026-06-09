@@ -9,10 +9,12 @@ export interface ScanInput {
   name: string;
 }
 
+export type AIPlatform = "ChatGPT" | "Perplexity" | "Google AI";
+
 export interface AIPresenceResult {
   score: number;
   platformResults: {
-    platform: "Web Search" | "ChatGPT" | "Perplexity";
+    platform: AIPlatform;
     prompt: string;
     mentioned: boolean;
     mentionContext: string;
@@ -20,6 +22,19 @@ export interface AIPresenceResult {
     competitorsMentioned: string[];
   }[];
   summary: string;
+}
+
+export interface CompetitorPlatformScore {
+  platform: AIPlatform;
+  mentioned: boolean;
+  score: number; // 0-100
+}
+
+export interface CompetitorAnalysis {
+  name: string;
+  overallScore: number; // 0-100
+  totalMentions: number;
+  platformScores: CompetitorPlatformScore[];
 }
 
 export interface SiteReadinessAnalysis {
@@ -84,6 +99,7 @@ export interface ScanResult {
   findings: Finding[];
   quickWins: QuickWin[];
   competitorsFound: string[];
+  competitorAnalysis?: CompetitorAnalysis[];
   createdAt: Date;
 }
 

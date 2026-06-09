@@ -1,4 +1,56 @@
-import { AIPresenceResult, SiteReadinessAnalysis, AuthorityResult, Finding, QuickWin } from "./types";
+import { AIPresenceResult, SiteReadinessAnalysis, AuthorityResult, Finding, QuickWin, CompetitorAnalysis, AIPlatform } from "./types";
+import { PROMPT_PLATFORM_MAP } from "./ai-check";
+
+const ALL_PLATFORMS: AIPlatform[] = ["ChatGPT", "Perplexity", "Google AI"];
+
+// Queries per platform (based on PROMPT_PLATFORM_MAP)
+const PLATFORM_QUERY_COUNT: Record<AIPlatform, number> = {
+  ChatGPT: PROMPT_PLATFORM_MAP.filter(p => p === "ChatGPT").length,
+  Perplexity: PROMPT_PLATFORM_MAP.filter(p => p === "Perplexity").length,
+  "Google AI": PROMPT_PLATFORM_MAP.filter(p => p === "Google AI").length,
+};
+
+// Derive per-competitor per-platform scores from existing platformResults (no extra API calls)
+export function computeCompetitorAnalysis(
+  platformResults: AIPresenceResult["platformResults"]
+): CompetitorAnalysis[] {
+  // Map: competitor name → platform → mention count
+  const mentionMap = new Map<string, Map<AIPlatform, number>>();
+
+  platformResults.forEach((result, idx) => {
+    const platform: AIPlatform = PROMPT_PLATFORM_MAP[idx] ?? "ChatGPT";
+    result.competitorsMentioned.forEach(raw => {
+      const name = raw.trim();
+      if (!name || name.length < 2) return;
+      if (!mentionMap.has(name)) mentionMap.set(name, new Map());
+      const byPlatform = mentionMap.get(name)!;
+      byPlatform.set(platform, (byPlatform.get(platform) ?? 0) + 1);
+    });
+  });
+
+  const analyses: CompetitorAnalysis[] = [];
+
+  mentionMap.forEach((byPlatform, name) => {
+    const platformScores = ALL_PLATFORMS.map(platform => {
+      const mentions = byPlatform.get(platform) ?? 0;
+      const total = PLATFORM_QUERY_COUNT[platform] || 1;
+      return {
+        platform,
+        mentioned: mentions > 0,
+        score: Math.min(100, Math.round((mentions / total) * 100)),
+      };
+    });
+
+    const totalMentions = Array.from(byPlatform.values()).reduce((s, n) => s + n, 0);
+    const overallScore = Math.round(
+      platformScores.reduce((s, p) => s + p.score, 0) / ALL_PLATFORMS.length
+    );
+
+    analyses.push({ name, overallScore, totalMentions, platformScores });
+  });
+
+  return analyses.sort((a, b) => b.overallScore - a.overallScore).slice(0, 6);
+}
 
 // Calculate AI Presence Score (0-100)
 export function calculateAIPresenceScore(

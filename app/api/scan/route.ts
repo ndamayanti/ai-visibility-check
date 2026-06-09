@@ -14,6 +14,7 @@ import {
   calculateOverallScore,
   generateFindings,
   generateQuickWins,
+  computeCompetitorAnalysis,
 } from "@/lib/scoring";
 
 // Simple UUID generator for scanId
@@ -107,11 +108,12 @@ export async function POST(request: NextRequest) {
 
     const quickWins = generateQuickWins(siteReadiness, aiPresence, contentAuthority);
 
-    // Extract competitors
+    // Extract competitors + per-platform analysis
     const competitors = new Set<string>();
     aiPresence.platformResults.forEach((result) => {
       result.competitorsMentioned.forEach((c) => competitors.add(c));
     });
+    const competitorAnalysis = computeCompetitorAnalysis(aiPresence.platformResults);
 
     // Try to save scan result to database (optional)
     try {
@@ -154,6 +156,7 @@ export async function POST(request: NextRequest) {
       findings,
       quickWins,
       competitorsFound: Array.from(competitors),
+      competitorAnalysis,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

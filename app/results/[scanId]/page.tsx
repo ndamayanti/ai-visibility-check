@@ -4,8 +4,181 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import ScoreGauge from "@/components/ScoreGauge";
 import CategoryCard from "@/components/CategoryCard";
-import { ScanResult, Finding } from "@/lib/types";
+import { ScanResult, Finding, CompetitorAnalysis, AIPlatform } from "@/lib/types";
 import { getScoreBadge } from "@/lib/scoring";
+
+/* ─────────────────────────────────────────────
+   Platform colours + icons (inline, no extra deps)
+───────────────────────────────────────────── */
+const PLATFORM_META: Record<AIPlatform, { label: string; color: string; bg: string; border: string }> = {
+  ChatGPT:    { label: "ChatGPT",    color: "#10b981", bg: "rgba(16,185,129,0.1)",   border: "rgba(16,185,129,0.25)" },
+  Perplexity: { label: "Perplexity", color: "#8b5cf6", bg: "rgba(139,92,246,0.1)",   border: "rgba(139,92,246,0.25)" },
+  "Google AI":{ label: "Google AI",  color: "#3b82f6", bg: "rgba(59,130,246,0.1)",   border: "rgba(59,130,246,0.25)" },
+};
+
+function ScoreBar({ score, color }: { score: number; color: string }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div style={{ flex: 1, height: '5px', background: 'var(--bg4)', borderRadius: '99px', overflow: 'hidden' }}>
+        <div style={{ width: `${score}%`, height: '100%', background: color, borderRadius: '99px', transition: 'width 0.6s ease' }} />
+      </div>
+      <span style={{ fontSize: '12px', fontWeight: 700, color, minWidth: '32px', textAlign: 'right' }}>{score}%</span>
+    </div>
+  );
+}
+
+function PlatformBadge({ platform, mentioned, score }: { platform: AIPlatform; mentioned: boolean; score: number }) {
+  const m = PLATFORM_META[platform];
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '4px',
+      background: mentioned ? m.bg : 'rgba(255,255,255,0.03)',
+      border: `1px solid ${mentioned ? m.border : 'rgba(255,255,255,0.07)'}`,
+      borderRadius: '10px',
+      padding: '8px 12px',
+      minWidth: '90px',
+      flex: 1,
+    }}>
+      <span style={{ fontSize: '11px', fontWeight: 600, color: mentioned ? m.color : 'var(--muted2)' }}>{m.label}</span>
+      {mentioned
+        ? <ScoreBar score={score} color={m.color} />
+        : <span style={{ fontSize: '11px', color: 'var(--muted2)' }}>Tidak muncul</span>
+      }
+    </div>
+  );
+}
+
+function CompetitorSection({
+  competitors,
+  userScore,
+  userPlatformResults,
+}: {
+  competitors: CompetitorAnalysis[];
+  userScore: number;
+  userPlatformResults: ScanResult["aiPresenceData"]["platformResults"];
+}) {
+  if (competitors.length === 0) return null;
+
+  // Build user's per-platform score from platformResults
+  const userPlatformScores: Record<AIPlatform, { score: number; mentioned: boolean }> = {
+    ChatGPT:    { score: 0, mentioned: false },
+    Perplexity: { score: 0, mentioned: false },
+    "Google AI":{ score: 0, mentioned: false },
+  };
+  const platformCount: Record<AIPlatform, number> = { ChatGPT: 0, Perplexity: 0, "Google AI": 0 };
+  const platformMentions: Record<AIPlatform, number> = { ChatGPT: 0, Perplexity: 0, "Google AI": 0 };
+
+  userPlatformResults.forEach(r => {
+    const p = r.platform as AIPlatform;
+    if (p in platformCount) {
+      platformCount[p]++;
+      if (r.mentioned) platformMentions[p]++;
+    }
+  });
+
+  (Object.keys(userPlatformScores) as AIPlatform[]).forEach(p => {
+    const total = platformCount[p] || 1;
+    const mentions = platformMentions[p];
+    userPlatformScores[p] = {
+      mentioned: mentions > 0,
+      score: Math.min(100, Math.round((mentions / total) * 100)),
+    };
+  });
+
+  return (
+    <div style={{ marginBottom: '2rem', marginTop: '1.5rem' }}>
+      {/* Section header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
+        <h2 style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.06em', color: 'var(--muted)' }}>
+          Competitor AI Visibility
+        </h2>
+        <span style={{
+          fontSize: '11px', fontWeight: 700, padding: '2px 10px', borderRadius: '99px',
+          background: 'var(--red-dim)', color: 'var(--red)', border: '1px solid var(--red-bdr)'
+        }}>
+          {competitors.length} kompetitor ditemukan
+        </span>
+      </div>
+
+      <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '1.25rem', lineHeight: 1.6 }}>
+        Ketika AI ditanya tentang keyword kamu, brand-brand ini yang muncul — lengkap dengan skor per platform.
+      </p>
+
+      {/* Your score row (reference) */}
+      <div style={{
+        background: 'rgba(232,80,10,0.06)',
+        border: '1px solid var(--orange-bdr)',
+        borderRadius: '14px',
+        padding: '1.25rem 1.5rem',
+        marginBottom: '10px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1.5rem',
+        flexWrap: 'wrap',
+      }}>
+        <div style={{ minWidth: '160px' }}>
+          <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '2px' }}>Kamu</div>
+          <div style={{ fontSize: '22px', fontWeight: 800, color: '#fff', lineHeight: 1 }}>{userScore}<span style={{ fontSize: '13px', color: 'var(--muted)', fontWeight: 400, marginLeft: '3px' }}>/100</span></div>
+        </div>
+        <div style={{ flex: 1, display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          {(["ChatGPT", "Perplexity", "Google AI"] as AIPlatform[]).map(p => (
+            <PlatformBadge key={p} platform={p} mentioned={userPlatformScores[p].mentioned} score={userPlatformScores[p].score} />
+          ))}
+        </div>
+      </div>
+
+      {/* Competitor rows */}
+      {competitors.map((comp, i) => (
+        <div key={i} style={{
+          background: 'var(--bg2)',
+          border: '1px solid var(--bdr)',
+          borderRadius: '14px',
+          padding: '1.25rem 1.5rem',
+          marginBottom: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1.5rem',
+          flexWrap: 'wrap',
+          transition: 'border-color 0.2s',
+        }}
+          onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--bdr2)')}
+          onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--bdr)')}
+        >
+          {/* Rank + name */}
+          <div style={{ minWidth: '160px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
+              <span style={{
+                width: '22px', height: '22px', borderRadius: '6px', background: 'var(--red-dim)',
+                border: '1px solid var(--red-bdr)', color: 'var(--red)', fontSize: '11px',
+                fontWeight: 800, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              }}>{i + 1}</span>
+              <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff', wordBreak: 'break-word' }}>{comp.name}</span>
+            </div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: comp.overallScore > userScore ? 'var(--red)' : 'var(--green)', lineHeight: 1, marginTop: '4px' }}>
+              {comp.overallScore}
+              <span style={{ fontSize: '13px', color: 'var(--muted)', fontWeight: 400, marginLeft: '3px' }}>/100</span>
+              {comp.overallScore > userScore && (
+                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--red)', marginLeft: '8px' }}>▲ lebih tinggi</span>
+              )}
+              {comp.overallScore < userScore && (
+                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--green)', marginLeft: '8px' }}>▼ lebih rendah</span>
+              )}
+            </div>
+          </div>
+
+          {/* Platform badges */}
+          <div style={{ flex: 1, display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {comp.platformScores.map(ps => (
+              <PlatformBadge key={ps.platform} platform={ps.platform} mentioned={ps.mentioned} score={ps.score} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function ResultsPage() {
   const params = useParams();
@@ -36,6 +209,7 @@ export default function ResultsPage() {
               findings: data.findings,
               quickWins: data.quickWins,
               competitorsFound: data.competitorsFound,
+              competitorAnalysis: data.competitorAnalysis,
               createdAt: new Date(),
             });
             setLoading(false);
@@ -249,14 +423,13 @@ export default function ResultsPage() {
         {/* Key Findings */}
         <div style={{ marginBottom: '2rem' }}>
           <h2 style={{
-            fontSize: '20px',
+            fontSize: '13px',
             fontWeight: 700,
-            color: '#fff',
-            marginBottom: '1rem',
             textTransform: 'uppercase',
             letterSpacing: '.06em',
             color: 'var(--muted)',
-            marginTop: '1.5rem'
+            marginTop: '1.5rem',
+            marginBottom: '1rem',
           }}>
             Key Findings
           </h2>
@@ -386,46 +559,12 @@ export default function ResultsPage() {
           </div>
         </div>
 
-        {/* Competitors */}
-        {result.competitorsFound.length > 0 && (
-          <div style={{
-            marginBottom: '2rem',
-            background: 'var(--red-dim)',
-            border: '1px solid var(--red-bdr)',
-            borderRadius: '14px',
-            padding: '1.5rem',
-            marginTop: '1.5rem'
-          }}>
-            <h2 style={{
-              fontSize: '15px',
-              fontWeight: 700,
-              marginBottom: '.25rem',
-              color: '#fff'
-            }}>
-              ⚠️ Kompetitor yang Muncul di AI
-            </h2>
-            <p style={{ fontSize: '14px', color: 'rgba(255,255,255,.65)', lineHeight: 1.6, marginBottom: '1rem' }}>
-              Ketika AI ditanya tentang keyword kamu, kompetitor ini yang muncul:
-            </p>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '8px'
-            }}>
-              {result.competitorsFound.slice(0, 5).map((competitor, index) => (
-                <div key={index} style={{
-                  background: 'var(--bg2)',
-                  borderRadius: '10px',
-                  padding: '10px 14px',
-                  fontSize: '13px',
-                  color: 'rgba(255,255,255,.7)'
-                }}>
-                  {index + 1}. {competitor}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Competitor Analysis */}
+        <CompetitorSection
+          competitors={result.competitorAnalysis ?? []}
+          userScore={result.aiPresenceScore}
+          userPlatformResults={result.aiPresenceData.platformResults}
+        />
 
         {/* CTA Section */}
         <div style={{
